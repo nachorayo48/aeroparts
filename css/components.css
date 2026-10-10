@@ -1,0 +1,220 @@
+/* ==========================================================================
+   AEROPARTS - UI COMPONENTS & FORM STYLES
+   ========================================================================== */
+
+/* Primary Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 0.875rem; /* 14px */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.9375rem 2.25rem;
+  border-radius: 2px;
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--color-blue-aeroparts);
+  color: var(--color-white);
+  box-shadow: 0 2px 6px rgba(2, 45, 90, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-blue-francia);
+  box-shadow: 0 4px 12px rgba(0, 114, 187, 0.25);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+/* ==========================================================================
+   CONTACT FORM STYLES
+   ========================================================================== */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.form-label {
+  font-family: var(--font-body);
+  font-size: 0.9375rem; /* 15px */
+  font-weight: 600;
+  color: var(--color-blue-deep);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.required-asterisk {
+  color: var(--color-blue-francia);
+  font-weight: 700;
+}
+
+/* Radio Group */
+.radio-group-row {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  margin-top: 0.35rem;
+}
+
+.radio-option-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-blue-deep);
+  cursor: pointer;
+  user-select: none;
+}
+
+.radio-custom-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--color-border-input);
+  border-radius: 50%;
+  background-color: var(--color-white);
+  display: grid;
+  place-content: center;
+  margin: 0;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.radio-custom-input::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-blue-aeroparts);
+  transform: scale(0);
+  transition: transform 0.18s ease-in-out;
+}
+
+.radio-custom-input:checked {
+  border-color: var(--color-blue-aeroparts);
+}
+
+.radio-custom-input:checked::before {
+  transform: scale(1);
+}
+
+.radio-custom-input:focus-visible {
+  outline: 2px solid var(--color-blue-francia);
+  outline-offset: 2px;
+}
+
+/* Form Two Column Row */
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Input Fields */
+.form-input {
+  width: 100%;
+  height: 48px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-input);
+  border-radius: 2px;
+  padding: 0 1rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-blue-deep);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-input-60 {
+  max-width: 60%;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 160px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-input);
+  border-radius: 2px;
+  padding: 0.875rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-blue-deep);
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-blue-francia);
+  box-shadow: 0 0 0 3px rgba(0, 114, 187, 0.15);
+}
+
+/* Validation Errors */
+.form-input.is-invalid,
+.form-textarea.is-invalid {
+  border-color: var(--color-error);
+  background-color: #FFFDFD;
+}
+
+.field-error-msg {
+  display: none;
+  font-family: var(--font-body);
+  font-size: 0.8125rem; /* 13px */
+  color: var(--color-error);
+  margin-top: 0.25rem;
+}
+
+.is-invalid + .field-error-msg {
+  display: block;
+}
+
+/* Form Submission Status Box */
+.form-status-box {
+  display: none;
+  padding: 1rem 1.25rem;
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.form-status-box.is-success {
+  display: block;
+  background-color: #E8F5E9;
+  border: 1px solid #A5D6A7;
+  color: #1B5E20;
+}
+
+.form-status-box.is-error {
+  display: block;
+  background-color: #FFEBEE;
+  border: 1px solid #FFCDD2;
+  color: #B71C1C;
+}

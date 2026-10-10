@@ -1,0 +1,208 @@
+/* ==========================================================================
+   AEROPARTS - RESPONSIVE ADAPTATIONS & ACCESSIBILITY
+   Breakpoints: 1024px (Tablet / Accordion), 768px (Mobile), 480px (Small Mobile)
+   ========================================================================== */
+
+/* ==========================================================================
+   TABLET & BELOW (< 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  /* Navigation Drawer */
+  .menu-toggle-btn {
+    display: flex;
+  }
+
+  .main-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--color-blue-deep);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+  }
+
+  .main-nav.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 2.25rem;
+  }
+
+  .nav-link {
+    font-size: 1.35rem;
+    letter-spacing: 0.12em;
+  }
+
+  /* Quiénes somos layout tablet */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  /* Airbus Band Accordion Transformation for Tablet & Mobile */
+  .airbus-band-wrapper {
+    height: auto;
+    min-height: auto;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .airbus-columns {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .airbus-panel {
+    flex: none;
+    width: 100%;
+    min-height: 220px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    transition: min-height 0.45s ease, background-color 0.4s ease;
+  }
+
+  .airbus-panel:last-child {
+    border-bottom: none;
+  }
+
+  .airbus-panel-inner {
+    padding: 32px 24px;
+  }
+
+  .airbus-panel-title-wrap {
+    margin-top: 36px;
+    max-width: 80%;
+  }
+
+  .airbus-panel-btn {
+    top: 32px;
+    right: 24px;
+  }
+
+  /* Mobile Open Accordion */
+  .airbus-panel.is-open {
+    margin: 0;
+    height: auto;
+    min-height: 340px;
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px);
+    border: none;
+    border-bottom: 1px solid var(--color-sky-aeroparts);
+  }
+
+  .airbus-panel.is-open .airbus-panel-inner {
+    padding: 36px 24px 32px 24px;
+  }
+
+  .airbus-panel.is-open .airbus-panel-body {
+    max-height: 500px;
+  }
+
+  /* Contact layout tablet */
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+
+  /* In mobile/tablet, show contact info first, form second */
+  .contact-info-block {
+    order: 1;
+  }
+
+  .contact-form-block {
+    order: 2;
+  }
+
+  /* Footer tablet */
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ==========================================================================
+   MOBILE PHONES (< 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 76px;
+  }
+
+  .brand-logo-img {
+    width: 145px;
+  }
+
+  .hero-content {
+    padding-top: calc(var(--header-height) + 1.5rem);
+  }
+
+  .radio-group-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+  }
+
+  .form-row-2col {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .form-input-60 {
+    max-width: 100%;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-animate-in {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .scroll-line {
+    animation: none !important;
+  }
+}
