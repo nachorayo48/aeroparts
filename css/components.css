@@ -70,63 +70,6 @@
   font-weight: 700;
 }
 
-/* Radio Group */
-.radio-group-row {
-  display: flex;
-  align-items: center;
-  gap: 2.25rem;
-  margin-top: 0.35rem;
-}
-
-.radio-option-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  color: var(--color-blue-deep);
-  cursor: pointer;
-  user-select: none;
-}
-
-.radio-custom-input {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 1.5px solid var(--color-border-input);
-  border-radius: 50%;
-  background-color: var(--color-white);
-  display: grid;
-  place-content: center;
-  margin: 0;
-  cursor: pointer;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.radio-custom-input::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: var(--color-blue-aeroparts);
-  transform: scale(0);
-  transition: transform 0.18s ease-in-out;
-}
-
-.radio-custom-input:checked {
-  border-color: var(--color-blue-aeroparts);
-}
-
-.radio-custom-input:checked::before {
-  transform: scale(1);
-}
-
-.radio-custom-input:focus-visible {
-  outline: 2px solid var(--color-blue-francia);
-  outline-offset: 2px;
-}
-
 /* Form Two Column Row */
 .form-row-2col {
   display: grid;
