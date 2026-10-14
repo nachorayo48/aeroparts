@@ -67,15 +67,45 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.75rem;
 }
 
-/* Paragraphs */
-.paragraph-lead {
+/* Paragraphs (Cambio 7: Justified with hyphens across all running text) */
+p, .paragraph-lead, .airbus-panel-body p {
   font-family: var(--font-body);
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.0625rem; /* ~17px */
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.68;
   color: var(--color-blue-deep);
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+}
+
+/* Exemptions: do not justify headings, labels, buttons, nav, inputs, or footer elements */
+.section-eyebrow,
+.section-title,
+.hero-claim,
+.hero-subclaim,
+.nav-link,
+.btn,
+.form-label,
+.field-error-msg,
+.form-status-box,
+.contact-subtitle,
+.contact-address,
+.contact-direct-links,
+.footer-claim,
+.footer-nav-link,
+.footer-contact,
+.footer-contact p,
+.footer-bottom,
+.footer-bottom p {
+  text-align: left;
+  hyphens: manual;
+  -webkit-hyphens: manual;
 }
 
 .text-muted {
   color: var(--color-text-muted);
 }
+

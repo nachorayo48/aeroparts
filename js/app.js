@@ -188,16 +188,95 @@
   }
 
   /* ==========================================================================
-     3. CONTACT FORM
+     3. I18N LANGUAGE SELECTOR (ES | EN)
      ========================================================================== */
-  function initContactForm() {
+  function initLanguage() {
+    const defaultLang = 'es';
+    let currentLang = defaultLang;
+
+    try {
+      const stored = localStorage.getItem('aeroparts_lang');
+      if (stored === 'es' || stored === 'en') {
+        currentLang = stored;
+      }
+    } catch (e) {
+      console.warn('LocalStorage unavailable for language preference:', e);
+    }
+
+    function setLanguage(lang) {
+      currentLang = (lang === 'en') ? 'en' : 'es';
+
+      try {
+        localStorage.setItem('aeroparts_lang', currentLang);
+      } catch (e) {}
+
+      document.documentElement.lang = currentLang;
+
+      // Update button active state in header and mobile drawer
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.getAttribute('data-lang') === currentLang) {
+          btn.classList.add('is-active');
+        } else {
+          btn.classList.remove('is-active');
+        }
+      });
+
+      // Synchronize hidden input for Formspree
+      const hiddenLangInput = document.getElementById('form-input-lang');
+      if (hiddenLangInput) {
+        hiddenLangInput.value = currentLang;
+      }
+
+      // Update texts
+      const dict = window.aeropartsTranslations && window.aeropartsTranslations[currentLang];
+      if (!dict) return;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (dict[key] !== undefined) {
+          el.setAttribute('placeholder', dict[key]);
+        }
+      });
+    }
+
+    // Attach click events
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetLang = btn.getAttribute('data-lang');
+        if (targetLang && targetLang !== currentLang) {
+          setLanguage(targetLang);
+        }
+      });
+    });
+
+    // Apply active language immediately
+    setLanguage(currentLang);
+
+    return {
+      getLang: () => currentLang,
+      setLanguage
+    };
+  }
+
+  /* ==========================================================================
+     4. CONTACT FORM (Formspree AJAX & Bilingual Feedback)
+     ========================================================================== */
+  function initContactForm(langManager) {
     const form = document.getElementById('aeroparts-contact-form');
     if (!form) return;
 
     const submitBtn = form.querySelector('.btn-submit');
     const statusBox = document.getElementById('form-status-message');
 
-    const entityRadios = form.querySelectorAll('input[name="entity_type"]');
     const nameInput = document.getElementById('contact-name');
     const emailInput = document.getElementById('contact-email');
     const subjectInput = document.getElementById('contact-subject');
@@ -212,13 +291,6 @@
       });
     });
 
-    entityRadios.forEach(radio => {
-      radio.addEventListener('change', () => {
-        const radioContainer = document.querySelector('.radio-group-row');
-        if (radioContainer) radioContainer.classList.remove('is-invalid');
-      });
-    });
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       let isValid = true;
@@ -229,18 +301,7 @@
         statusBox.textContent = '';
       }
 
-      // 1. Radio
-      const entitySelected = Array.from(entityRadios).some(r => r.checked);
-      const radioContainer = document.querySelector('.radio-group-row');
-      if (!entitySelected) {
-        isValid = false;
-        if (radioContainer) radioContainer.classList.add('is-invalid');
-        if (!firstInvalidField) firstInvalidField = entityRadios[0];
-      } else {
-        if (radioContainer) radioContainer.classList.remove('is-invalid');
-      }
-
-      // 2. Name
+      // 1. Name
       if (!nameInput.value.trim()) {
         isValid = false;
         nameInput.classList.add('is-invalid');
@@ -249,7 +310,7 @@
         nameInput.classList.remove('is-invalid');
       }
 
-      // 3. Email
+      // 2. Email
       if (!emailInput.value.trim() || !emailRegex.test(emailInput.value.trim())) {
         isValid = false;
         emailInput.classList.add('is-invalid');
@@ -258,7 +319,7 @@
         emailInput.classList.remove('is-invalid');
       }
 
-      // 4. Subject
+      // 3. Subject
       if (!subjectInput.value.trim()) {
         isValid = false;
         subjectInput.classList.add('is-invalid');
@@ -267,7 +328,7 @@
         subjectInput.classList.remove('is-invalid');
       }
 
-      // 5. Message
+      // 4. Message
       if (!messageInput.value.trim()) {
         isValid = false;
         messageInput.classList.add('is-invalid');
@@ -281,10 +342,15 @@
         return;
       }
 
-      const originalBtnText = submitBtn ? submitBtn.textContent : 'ENVIAR';
+      const activeLang = langManager ? langManager.getLang() : (document.documentElement.lang || 'es');
+      const dict = window.aeropartsTranslations && window.aeropartsTranslations[activeLang] ? window.aeropartsTranslations[activeLang] : {};
+
+      const originalBtnText = dict['form.btn.submit'] || (activeLang === 'en' ? 'SEND' : 'ENVIAR');
+      const sendingText = dict['form.btn.sending'] || (activeLang === 'en' ? 'SENDING…' : 'ENVIANDO…');
+
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'ENVIANDO...';
+        submitBtn.textContent = sendingText;
       }
 
       const formData = new FormData(form);
@@ -299,16 +365,16 @@
         });
 
         if (response.ok) {
-          showSuccessMessage();
+          showFeedback('success', activeLang);
           form.reset();
+          const hiddenLangInput = document.getElementById('form-input-lang');
+          if (hiddenLangInput) hiddenLangInput.value = activeLang;
         } else {
-          showSuccessMessage();
-          form.reset();
+          showFeedback('error', activeLang);
         }
       } catch (err) {
-        console.warn('Form submission notice:', err);
-        showSuccessMessage();
-        form.reset();
+        console.warn('Form submission network error:', err);
+        showFeedback('error', activeLang);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -317,10 +383,20 @@
       }
     });
 
-    function showSuccessMessage() {
-      if (statusBox) {
+    function showFeedback(type, activeLang) {
+      if (!statusBox) return;
+      const dict = window.aeropartsTranslations && window.aeropartsTranslations[activeLang] ? window.aeropartsTranslations[activeLang] : {};
+
+      if (type === 'success') {
         statusBox.className = 'form-status-box is-success';
-        statusBox.textContent = 'Recibimos su consulta. Nos contactaremos a la brevedad.';
+        statusBox.textContent = dict['form.msg.success'] || (activeLang === 'en'
+          ? 'We have received your inquiry. We will contact you shortly.'
+          : 'Recibimos su consulta. Nos contactaremos a la brevedad.');
+      } else {
+        statusBox.className = 'form-status-box is-error';
+        statusBox.textContent = dict['form.msg.error'] || (activeLang === 'en'
+          ? 'Your inquiry could not be sent. Please try again or contact us at christiansterli@aeroparts.com.ar.'
+          : 'No fue posible enviar su consulta. Por favor, intente nuevamente o escríbanos a christiansterli@aeroparts.com.ar.');
       }
     }
   }
@@ -330,11 +406,13 @@
     document.addEventListener('DOMContentLoaded', () => {
       initNavigation();
       initAirbusPanels();
-      initContactForm();
+      const langManager = initLanguage();
+      initContactForm(langManager);
     });
   } else {
     initNavigation();
     initAirbusPanels();
-    initContactForm();
+    const langManager = initLanguage();
+    initContactForm(langManager);
   }
 })();

@@ -213,7 +213,7 @@
 
 /* The ACTIVE Panel transforms into a Frosted Glass Card */
 .airbus-panel.is-open {
-  flex: 1.5;
+  flex: 1.65;
   cursor: default;
   margin: 14px 10px;
   height: calc(100% - 28px);
@@ -232,22 +232,26 @@
 }
 
 .airbus-panel.is-open .airbus-panel-inner {
-  padding: 36px 36px 32px 36px;
+  padding: 32px 32px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .airbus-panel.is-open .airbus-panel-title-wrap {
-  margin-top: 28px;
+  margin-top: 24px;
   max-width: 100%;
 }
 
 .airbus-panel.is-open .airbus-panel-title {
   color: var(--color-blue-aeroparts);
-  font-size: 1.5rem;
+  font-size: clamp(1.1875rem, 1.6vw, 1.4375rem);
+  line-height: 1.2;
 }
 
 .airbus-panel.is-open .airbus-panel-btn {
-  top: 36px;
-  right: 32px;
+  top: 32px;
+  right: 28px;
   color: var(--color-blue-aeroparts);
   cursor: pointer;
 }
@@ -258,6 +262,18 @@
 
 .airbus-panel.is-open .airbus-panel-body {
   opacity: 1;
-  max-height: 320px;
+  max-height: 380px;
   transform: translateY(0);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-sky-aeroparts) transparent;
+}
+
+.airbus-panel.is-open .airbus-panel-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.airbus-panel.is-open .airbus-panel-body::-webkit-scrollbar-thumb {
+  background-color: var(--color-sky-aeroparts);
+  border-radius: 2px;
 }
